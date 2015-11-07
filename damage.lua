@@ -52,7 +52,7 @@ local four = setTrue({
 })
 
 local five = setTrue({
-    "smash", "smashed with a bonecrushing sound", "slashed",
+    "smashed", "smashed with a bonecrushing sound", "slashed",
     "thrust into completely", "tortured", "butchered", "agonized",
     "burned horribly", "froze", "shocked completely",
     "pounded very hard", "corrupted", "splashed hard",
