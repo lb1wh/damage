@@ -87,7 +87,7 @@ local eight = setTrue({
 
 -- Remove trailing and leading whitespace from string.
 function trim(s)
-  return (s:gsub("^%s*(.-)%s*$", "%1"))
+    return (s:gsub("^%s*(.-)%s*$", "%1"))
 end
 
 -- Regex captures the bit between 'You' and 'on', but we
@@ -105,11 +105,28 @@ local damageLevels = {
     one, two, three, four, five, six, seven, eight
 }
 
+function nominalColor(level)
+    local color = {0, 0, 0} -- r, g, b
+    if level >= 1 and level <= 2 then
+        color = {79, 143, 77}  -- Green
+    elseif level >= 3 and level <= 4 then
+        color = {232, 232, 77} -- Yellow
+    elseif level >= 5 and level <= 6 then
+        color = {255, 139, 15} -- Orange
+    elseif level >= 7 and level <= 8 then
+        color = {255, 15, 15}  -- Red
+    end
+    return color
+end
+
 for i, level in pairs(damageLevels) do
     if level[firstMatch] then
         -- Select the first instance of the match.
         selectString(firstMatch, 1)
+        rgb = nominalColor(i)
+        setFgColor(rgb[1], rgb[2], rgb[3])
         -- Replace it with its damage value.
         replace(firstMatch .. "(" .. i .. ")")
+        resetFormat()
     end
 end
