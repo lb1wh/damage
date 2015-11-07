@@ -1,4 +1,4 @@
--- Scanning for pattern: You (\w+) (.*) and replacing
+-- Scanning for pattern: You ([\w\s]+) on (.*) and replacing
 -- the first pattern group, e.g. "smash", with "smash(5)",
 -- given that 5 is descriptive of smashing damage.
 
@@ -85,7 +85,21 @@ local eight = setTrue({
     "devastatingly decimate"
 })
 
-local firstMatch = matches[2] -- The first pattern that matched, e.g. graze.
+-- Remove trailing and leading whitespace from string.
+function trim(s)
+  return (s:gsub("^%s*(.-)%s*$", "%1"))
+end
+
+-- Regex captures the bit between 'You' and 'on', but we
+-- only need the part leading up to the monster name.
+-- You slashed Judy very hard on her x with your y.
+-- You somewhat harmed Judy on her x with your y.
+function extractDamage(s)
+    local dmg = s:gsub("%f[%w]%u%l.+", "")
+    return trim(dmg)
+end
+
+local firstMatch = extractDamage(matches[2])
 
 local damageLevels = {
     one, two, three, four, five, six, seven, eight
