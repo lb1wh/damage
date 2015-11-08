@@ -97,7 +97,7 @@ end
 -- You harmed Judy badly on her x with your y.
 function extractDamage(s)
     local dmg = s:gsub("%f[%w]%u%l+", "")
-    dmg = dmg:gsub("  ", " ")
+    dmg = dmg:gsub("%s+", " ")
     return trim(dmg)
 end
 
