@@ -52,7 +52,7 @@ local four = setTrue({
 })
 
 local five = setTrue({
-    "smashed", "smashed with a bonecrushing sound", "slashed",
+    "smashed", "smashed with a bonecrushing sound", "slashed very hard",
     "thrust into completely", "tortured", "butchered", "agonized",
     "burned horribly", "froze", "shocked completely",
     "pounded very hard", "corrupted", "splashed hard",
@@ -96,7 +96,8 @@ end
 -- You somewhat harmed Judy on her x with your y.
 -- You harmed Judy badly on her x with your y.
 function extractDamage(s)
-    local dmg = s:gsub("%f[%w]%u%l.+%s*", "")
+    local dmg = s:gsub("%f[%w]%u%l+", "")
+    dmg = dmg:gsub("  ", " ")
     return trim(dmg)
 end
 
