@@ -87,19 +87,21 @@ local eight = setTrue({
 
 -- Remove trailing and leading whitespace from string.
 function trim(s)
-    return (s:gsub("^%s*(.-)%s*$", "%1"))
+  return (s:gsub("^%s*(.-)%s*$", "%1"))
 end
 
 -- Regex captures the bit between 'You' and 'on', but we
 -- only need the part leading up to the monster name.
 -- You slashed Judy very hard on her x with your y.
 -- You somewhat harmed Judy on her x with your y.
+-- You harmed Judy badly on her x with your y.
 function extractDamage(s)
-    local dmg = s:gsub("%f[%w]%u%l.+", "")
+    local dmg = s:gsub("%f[%w]%u%l.+%s*", "")
     return trim(dmg)
 end
 
-local firstMatch = extractDamage(matches[2])
+local firstMatch = matches[2] -- harmed Judy badly, somewhat harmed Judy, slashed Judy very hard
+local damage = extractDamage(firstMatch) -- harmed badly, somewhat harmed, slashed very hard
 
 local damageLevels = {
     one, two, three, four, five, six, seven, eight
@@ -120,7 +122,7 @@ function nominalColor(level)
 end
 
 for i, level in pairs(damageLevels) do
-    if level[firstMatch] then
+    if level[damage] then
         -- Select the first instance of the match.
         selectString(firstMatch, 1)
         rgb = nominalColor(i)
