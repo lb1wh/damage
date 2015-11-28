@@ -1,4 +1,4 @@
--- Scanning for pattern: You ([\w\s]+) on (.*) and replacing
+-- Scanning for pattern: You ([\w\-\'\s]+) on .* and replacing
 -- the first pattern group, e.g. "smash", with "smash(5)",
 -- given that 5 is descriptive of smashing damage.
 
@@ -96,7 +96,7 @@ end
 -- You somewhat harmed Judy on her x with your y.
 -- You harmed Judy badly on her x with your y.
 function extractDamage(s)
-    local dmg = s:gsub("%f[%w]%u%l+", "")
+    local dmg = s:gsub("%f[%w]%u%l+[%-%']*", "")
     dmg = dmg:gsub("%s+", " ")
     return trim(dmg)
 end
