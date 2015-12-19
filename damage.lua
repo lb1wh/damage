@@ -90,6 +90,18 @@ function trim(s)
   return (s:gsub("^%s*(.-)%s*$", "%1"))
 end
 
+-- Remove lower case second names.
+function removeName(s)
+    local lowerCaseNames = {
+        "guard", "soldier", "demon", "mage"
+    }
+    local withoutName = s
+    for _, v in pairs(lowerCaseNames) do
+        withoutName = s:gsub(" " .. v, "")
+    end
+    return withoutName
+end
+
 -- Regex captures the bit between 'You' and 'on', but we
 -- only need the part leading up to the monster name.
 -- You slashed Judy very hard on her x with your y.
@@ -98,6 +110,7 @@ end
 function extractDamage(s)
     local dmg = s:gsub("%f[%w]%u%l+[%-%']*", "")
     dmg = dmg:gsub("%s+", " ")
+    dmg = removeName(dmg)
     return trim(dmg)
 end
 
