@@ -93,7 +93,7 @@ end
 -- Remove lower case second names.
 function removeName(s)
     local lowerCaseNames = {
-        "guard", "soldier", "demon", "mage"
+        "guard", "soldier", "demon", "mage", "fighter"
     }
     local withoutName = s
     for _, v in pairs(lowerCaseNames) do
