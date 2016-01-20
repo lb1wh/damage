@@ -93,13 +93,13 @@ end
 -- Remove lower case second names.
 function removeName(s)
     local lowerCaseNames = {
-        "guard", "soldier", "demon", "mage", "fighter"
+        "guard", "soldier", "demon", "mage", "fighter",
+        "plume", "knight"
     }
-    local withoutName = s
     for _, v in pairs(lowerCaseNames) do
-        withoutName = s:gsub(" " .. v, "")
+        s = s:gsub(" " .. v, "")
     end
-    return withoutName
+    return s
 end
 
 -- Regex captures the bit between 'You' and 'on', but we
