@@ -1,6 +1,6 @@
 -- Damage types, ascending. Min. damage is 1, max is 8.
 local one = {
-    "grazed", "prodded", "distressed",
+    "grazed", "prodded ", "distressed",
     "brushed", "punished", "licked with flames", "cooled",
     "jolted", "swayed", "stung", "sprinkled",
     "bashed", "ruffled", "somewhat puzzled", "scorched with acid",
@@ -96,6 +96,7 @@ function extractDamage(s, damageLevels)
 
     local count = 0
     local result = nil
+    local earlyReturn = false
 
     -- O(n^2)
     for i, level in pairs(damageLevels) do
@@ -107,7 +108,13 @@ function extractDamage(s, damageLevels)
                 setFgColor(rgb[1], rgb[2], rgb[3])
                 replace(s .. "(" .. i .. ")")
                 resetFormat()
+                earlyReturn = true
+                break
             end
+        end
+        -- Stop searching once we've found out damage type.
+        if earlyReturn then
+            break
         end
     end
 end
