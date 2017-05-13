@@ -114,7 +114,7 @@ function extractDamage(s, damageLevels)
                 break
             end
         end
-        -- Stop searching once we've found out damage type.
+        -- Stop searching once we've found our damage type.
         if earlyReturn then
             break
         end
