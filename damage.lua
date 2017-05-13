@@ -1,3 +1,5 @@
+-- Mudlet trigger should be (You .* on .*) and its type "perl regexp".
+
 -- Damage types, ascending. Min. damage is 1, max is 8.
 local one = {
     "grazed", "prodded ", "distressed",
