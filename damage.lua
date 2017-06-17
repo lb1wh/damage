@@ -15,17 +15,17 @@ local two = {
     "injured", "punished hard", "scorched", "chilled",
     "jolted badly", "shook", "tainted", "wet",
     "crushed", "pushed", "puzzled", "burned with acid",
-    "prick", "prod", "slightly injure", "wound slightly",
+    "prick", "prod", "slightly injure", "(wound) .* (slightly)",
     "scorches"
 }
 
 local three = {
-    "hit hard", "cut", "punctured hard", "harmed",
-    "injured seriously", "purged", "scorched badly",
-    "chilled causing major shivering",
-    "shocked", "shook seriously", "contaminated", "wet thoroughly",
+    "hit hard", "cut", "(punctured) .* (hard)", "harmed",
+    "injured seriously", "purged", "(scorched) .* (badly)",
+    "(chilled) .* (causing major shivering)",
+    "shocked", "shook seriously", "contaminated", "(wet) .* (thoroughly)",
     "crushed breaking bones", "buffeted", "baffled",
-    "burned badly with acid",
+    "(burned) .* (badly with acid)",
     "cut deeply", "stab", "whack", "hit hard",
     "painfully hammer", "wound", "screams out loud as flames engulf"
 }
@@ -35,7 +35,7 @@ local four = {
     "churned", "smote", "burned", "froze lightly",
     "shocked savagely", "pounded", "intoxicated", "splashed",
     "buried", "buffeted hard", "seriously baffled", "corroded",
-    "shred", "stab deeply", "bash", "wound greatly",
+    "shred", "(stab) .* (deeply)", "bash", "(wound) .* (greatly)",
     "looks overwhelmed with fear as the flames burn"
 }
 
@@ -44,7 +44,7 @@ local five = {
     "(slashed) .* (very hard)",
     "(thrust into) .* (completely)", "tortured", "butchered", "agonized",
     "burned horribly", "froze", "shocked completely",
-    "pounded very hard", "corrupted", "splashed hard",
+    "(pounded) .* (very hard)", "corrupted", "splashed hard",
     "buried completely", "slammed", "bewildered", "disfigured",
     "painfully cleave", "perforate", "bash very hard",
     "mercilessly smash", "wound terribly",
@@ -53,9 +53,10 @@ local five = {
 
 local six = {
     "massacred", "tortured deviously", "butchered badly", "vanquished",
-    "burned to a crisp", "froze badly", "stunned", "blasted violently",
-    "poisoned", "soaked", "crushed into pieces", "slammed very hard",
-    "stupified", "disfigured horribly", "run-through", "bludgeon",
+    "(burned) .* (to a crisp)", "froze badly", "stunned",
+    "(blasted) .* (violently)", "poisoned", "soaked",
+    "(crushed) .* (into pieces)", "slammed very hard",
+    "stupified", "(disfigured) .* (horribly)", "run-through", "bludgeon",
     "awfully massacre", "totally massacre"
 }
 
