@@ -52,8 +52,8 @@ local five = {
 }
 
 local six = {
-    "massacred", "tortured deviously", "butchered badly", "vanquished",
-    "(burned) .* (to a crisp)", "froze badly", "stunned",
+    "massacred", "(tortured) .* (deviously)", "(butchered) .* (badly)",
+    "vanquished", "(burned) .* (to a crisp)", "froze badly", "stunned",
     "(blasted) .* (violently)", "poisoned", "soaked",
     "(crushed) .* (into pieces)", "slammed very hard",
     "stupified", "(disfigured) .* (horribly)", "run-through", "bludgeon",
