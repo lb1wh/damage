@@ -1,4 +1,4 @@
--- Mudlet trigger should be (You .* on .*) and its type "perl regexp".
+-- Mudlet trigger should be ([Yy]ou .* on .*) and its type "perl regexp".
 
 -- Damage types, ascending. Min. damage is 1, max is 8.
 local one = {
@@ -95,7 +95,7 @@ end
 
 function extractDamage(s, damageLevels)
     -- Capture the part between "You" and "on"
-    s = s:gsub("You (.*) on .*", "%1")
+    s = s:gsub("[Yy]ou (.*) on .*", "%1")
 
     local count = 0
     local result = nil
