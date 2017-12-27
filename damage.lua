@@ -1,10 +1,11 @@
 -- Mudlet trigger should be ([Yy]ou .* on .*) and its type "perl regexp".
 
--- Damage types. Min. damage is 1, max is 8.
+-- Damage types. No damage is 0, min. damage is 1, max is 8.
 -- The most specific expressions must appear before the
 -- less specific ones. E.g. "hit very hard" should be defined before
 -- "hit hard".
 local damageClasses = {
+    almost = 0,
     grazed = 1, prodded = 1, distressed = 1, brushed = 1,
     punished = 1, ["licked with flames"] = 1, cooled = 1,
     jolted = 1, swayed = 1, stung = 1, sprinkled = 1,
@@ -64,7 +65,9 @@ local damageClasses = {
 function nominalColor(level)
     local color = {0, 0, 0} -- r, g, b
 
-    if level == 1 then
+    if level == 0 then
+        color = {161, 161, 161} -- Light gray
+    elseif level == 1 then
         color = {51, 204, 51} --  Light green
     elseif level == 2 then
         color = {0, 153, 51} -- Dark green
