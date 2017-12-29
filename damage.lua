@@ -1,66 +1,173 @@
+
 -- Mudlet trigger should be ([Yy]ou .* on .*) and its type "perl regexp".
 
--- Damage types. No damage is 0, min. damage is 1, max is 8.
+-- Add items to our table such that we can iterate over them
+-- in order.
+function addNewItem(keyTable, myTable, key, value)
+    table.insert(keyTable, key)
+    myTable[key] = value
+end
+
+-- Maintain the order of our pairs.
+local keyTable = {}
+
+-- Damage text and damage class pairs.
+local damageClasses = {}
+
+-- Missed hits are 0, min. damage is 1 and max is 8.
 -- The most specific expressions must appear before the
--- less specific ones. E.g. "hit very hard" should be defined before
+-- least specific ones. E.g. "hit very hard" should be defined before
 -- "hit hard".
-local damageClasses = {
-    almost = 0,
-    grazed = 1, prodded = 1, distressed = 1, brushed = 1,
-    punished = 1, ["licked with flames"] = 1, cooled = 1,
-    jolted = 1, swayed = 1, stung = 1, sprinkled = 1,
-    bashed = 1, ruffled = 1, ["somewhat puzzled"] = 1,
-    ["scorched with acid"] = 1, nick = 1, poke = 1,
-    nudge = 1, ["nearly evaded"] = 1, ["nearly manages to evade"] = 1,
-    ["hit .* very hard"] = 4,
-    ["hit .* hard"] = 3,
-    ["hit"] = 2, lacerated = 2, punctured = 2,
-    ["somewhat harmed"] = 2, injured = 2, ["punished hard"] = 2,
-    scorched = 2, chilled = 2, ["jolted badly"] = 2,
-    shook = 2, tainted = 2, wet = 2, crushed = 2, pushed = 2,
-    puzzled = 2, ["burned with acid"] = 2, prick = 2, prod = 2,
-    ["slightly injure"] = 2, ["wound slightly"] = 2, scorches = 2,
-    cut = 3, ["punctured .* hard"] = 3,
-    harmed = 3, ["injured seriously"] = 3, purged = 3,
-    ["scorched badly"] = 3, ["chilled causing major shivering"] = 3,
-    shocked = 3, ["shook seriously"] = 3, contaminated = 3,
-    ["wet thoroughly"] = 3, ["crushed breaking bones"] = 3,
-    buffeted = 3, baffled = 3, ["burned badly with acid"] = 3,
-    ["cut deeply"] = 3, stab = 3, whack = 3,
-    ["painfully hammer"] = 3, wound = 3, ["screams out loud as flames engulf"] = 3,
-    sliced = 4, pierced = 4,
-    ["harmed badly"] = 4, churned = 4, smote = 4, burned = 4,
-    ["froze lightly"] = 4, ["shocked savagely"] = 4, pounded = 4,
-    intoxicated = 4, splashed = 4, buried = 4, ["buffeted hard"] = 4,
-    ["seriously baffled"] = 4, corroded = 4, shred = 4, ["stab deeply"] = 4,
-    bash = 4, ["wound greatly"] = 4,
-    ["looks overwhelmed with fear as the flames burn"] = 4,
-    smashed = 5, ["smashed .* with a bone crushing sound"] = 5,
-    ["slashed .* very hard"] = 5, ["thrust into .* completely"] = 5,
-    tortured = 5, butchered = 5, agonized = 5, ["burned horribly"] = 5,
-    froze = 5, ["shocked completely"] = 5, ["pounded very hard"] = 5,
-    corrupted = 5, ["splashed hard"] = 5, ["buried completely"] = 5,
-    slammed = 5, bewildered = 5, disfigured = 5, ["painfully cleave"] = 5,
-    perforate = 5, ["bash very hard"] = 5, ["mercilessly smash"] = 5,
-    ["wound terribly"] = 5,
-    ["eyes gleam with terror as your fireshield roasts"] = 5,
-    massacred = 6, ["tortured deviously"] = 6, ["butchered badly"] = 6,
-    vanquished = 6, ["burned to a crisp"] = 6, ["froze badly"] = 6,
-    stunned = 6, ["blasted violently"] = 6, poisoned = 6, soaked = 6,
-    ["crushed into pieces"] = 6, ["slammed very hard"] = 6, stupified = 6,
-    ["disfigured horribly"] = 6, ["run-through"] = 6, bludgeon = 6,
-    ["awfully massacre"] = 6, ["totally massacre"] = 6,
-    annihilated = 7, tormented = 7, pulverized = 7, exorcised = 7,
-    incinerated = 7, ["froze horribly causing frostbite"] = 7,
-    electrocuted = 7, ["blasted explosively"] = 7,
-    ["injected turning blood to poison"] = 7, drenched = 7,
-    ["bashed massively"] = 7, ["slammed massively"] = 7,
-    mindfroze = 7, mutilated = 7, impale = 7, shattered = 7,
-    ["annihilate with a god-like force"] = 7, ["totally annihilate"] = 7,
-    ["awfully massacre .* to small fragments"] = 7,
-    ["mortally wound"] = 8, ["impale horribly"] = 8, obliterated = 8,
-    ["totally annihilate"] = 8, ["devastatingly decimate"] = 8
-}
+addNewItem(keyTable, damageClasses, "almost", 0)
+addNewItem(keyTable, damageClasses, "grazed", 1)
+addNewItem(keyTable, damageClasses, "prodded", 1)
+addNewItem(keyTable, damageClasses, "distressed", 1)
+addNewItem(keyTable, damageClasses, "brushed", 1)
+addNewItem(keyTable, damageClasses, "punished .* hard", 2)
+addNewItem(keyTable, damageClasses, "punished", 1)
+addNewItem(keyTable, damageClasses, "licked .* with flames", 1)
+addNewItem(keyTable, damageClasses, "cooled", 1)
+addNewItem(keyTable, damageClasses, "jolted .* badly", 2)
+addNewItem(keyTable, damageClasses, "jolted", 1)
+addNewItem(keyTable, damageClasses, "swayed", 1)
+addNewItem(keyTable, damageClasses, "stung", 1)
+addNewItem(keyTable, damageClasses, "sprinkled", 1)
+addNewItem(keyTable, damageClasses, "bashed .* massively", 7)
+addNewItem(keyTable, damageClasses, "bash .* very hard", 5)
+addNewItem(keyTable, damageClasses, "bashed", 1)
+addNewItem(keyTable, damageClasses, "bash", 4)
+addNewItem(keyTable, damageClasses, "ruffled", 1)
+addNewItem(keyTable, damageClasses, "somewhat puzzled", 1)
+addNewItem(keyTable, damageClasses, "puzzled", 2)
+addNewItem(keyTable, damageClasses, "scorched .* with acid", 1)
+addNewItem(keyTable, damageClasses, "scorched .*  badly", 3)
+addNewItem(keyTable, damageClasses, "scorched", 2)
+addNewItem(keyTable, damageClasses, "nick", 1)
+addNewItem(keyTable, damageClasses, "poke", 1)
+addNewItem(keyTable, damageClasses, "nudge", 1)
+addNewItem(keyTable, damageClasses, "nearly evaded", 1)
+addNewItem(keyTable, damageClasses, "nearly manages to evade", 1)
+addNewItem(keyTable, damageClasses, "hit .* very hard",4)
+addNewItem(keyTable, damageClasses, "hit .* hard", 3)
+addNewItem(keyTable, damageClasses, "hit", 2)
+addNewItem(keyTable, damageClasses, "lacerated", 2)
+addNewItem(keyTable, damageClasses, "punctured", 2)
+addNewItem(keyTable, damageClasses, "somewhat harmed", 2)
+addNewItem(keyTable, damageClasses, "harmed .* badly", 4)
+addNewItem(keyTable, damageClasses, "harmed", 3)
+addNewItem(keyTable, damageClasses, "slightly injure", 2)
+addNewItem(keyTable, damageClasses, "injured .* seriously", 3)
+addNewItem(keyTable, damageClasses, "injured", 2)
+addNewItem(keyTable, damageClasses, "chilled .* causing major shivering", 3)
+addNewItem(keyTable, damageClasses, "chilled", 2)
+addNewItem(keyTable, damageClasses, "shook .* seriously", 3)
+addNewItem(keyTable, damageClasses, "shook", 2)
+addNewItem(keyTable, damageClasses, "tainted", 2)
+addNewItem(keyTable, damageClasses, "wet .* thoroughly", 3)
+addNewItem(keyTable, damageClasses, "wet", 2)
+addNewItem(keyTable, damageClasses, "crushed .* into pieces", 6)
+addNewItem(keyTable, damageClasses, "crushed .* breaking bones", 3)
+addNewItem(keyTable, damageClasses, "crushed", 2)
+addNewItem(keyTable, damageClasses, "pushed", 2)
+addNewItem(keyTable, damageClasses, "burned .* with acid", 2)
+addNewItem(keyTable, damageClasses, "prick", 2)
+addNewItem(keyTable, damageClasses, "prod", 2)
+addNewItem(keyTable, damageClasses, "mortally wound", 8)
+addNewItem(keyTable, damageClasses, "wound .* terribly", 5)
+addNewItem(keyTable, damageClasses, "wound .* greatly", 4)
+addNewItem(keyTable, damageClasses, "wound .* slightly", 2)
+addNewItem(keyTable, damageClasses, "wound", 3)
+addNewItem(keyTable, damageClasses, "scorched", 2)
+addNewItem(keyTable, damageClasses, "cut .* deeply", 3)
+addNewItem(keyTable, damageClasses, "cut", 3)
+addNewItem(keyTable, damageClasses, "punctured .* hard", 3)
+addNewItem(keyTable, damageClasses, "purged", 3)
+addNewItem(keyTable, damageClasses, "shocked .* completely", 5)
+addNewItem(keyTable, damageClasses, "shocked .* savagely", 4)
+addNewItem(keyTable, damageClasses, "shocked", 3)
+addNewItem(keyTable, damageClasses, "contaminated", 3)
+addNewItem(keyTable, damageClasses, "buffeted", 3)
+addNewItem(keyTable, damageClasses, "baffled", 3)
+addNewItem(keyTable, damageClasses, "burned .* badly with acid", 3)
+addNewItem(keyTable, damageClasses, "stab .* deeply", 4)
+addNewItem(keyTable, damageClasses, "stab", 3)
+addNewItem(keyTable, damageClasses, "whack", 3)
+addNewItem(keyTable, damageClasses, "painfully hammer", 3)
+addNewItem(keyTable, damageClasses, "screams out loud as flames engulf", 3)
+addNewItem(keyTable, damageClasses, "sliced", 4)
+addNewItem(keyTable, damageClasses, "pierced", 4)
+addNewItem(keyTable, damageClasses, "churned", 4)
+addNewItem(keyTable, damageClasses, "smote", 4)
+addNewItem(keyTable, damageClasses, "burned .* horribly", 5)
+addNewItem(keyTable, damageClasses, "burned .* to a crisp", 6)
+addNewItem(keyTable, damageClasses, "burned", 4)
+addNewItem(keyTable, damageClasses, "froze .* lightly", 4)
+addNewItem(keyTable, damageClasses, "pounded", 4)
+addNewItem(keyTable, damageClasses, "intoxicated", 4)
+addNewItem(keyTable, damageClasses, "splashed", 4)
+addNewItem(keyTable, damageClasses, "buried", 4)
+addNewItem(keyTable, damageClasses, "buffeted .* hard", 4)
+addNewItem(keyTable, damageClasses, "seriously baffled", 4)
+addNewItem(keyTable, damageClasses, "corroded", 4)
+addNewItem(keyTable, damageClasses, "shred", 4)
+addNewItem(keyTable, damageClasses, "looks overwhelmed with fear as the flames burn", 4)
+addNewItem(keyTable, damageClasses, "smashed .* with a bone crushing sound", 5)
+addNewItem(keyTable, damageClasses, "mercilessly smash", 5)
+addNewItem(keyTable, damageClasses, "smashed", 5)
+addNewItem(keyTable, damageClasses, "slashed .* very hard", 5)
+addNewItem(keyTable, damageClasses, "thrust into .* completely", 5)
+addNewItem(keyTable, damageClasses, "tortured .* deviously", 6)
+addNewItem(keyTable, damageClasses, "tortured", 5)
+addNewItem(keyTable, damageClasses, "butchered", 5)
+addNewItem(keyTable, damageClasses, "agonized", 5)
+addNewItem(keyTable, damageClasses, "mindfroze", 7)
+addNewItem(keyTable, damageClasses, "froze .* horribly causing frostbite", 7)
+addNewItem(keyTable, damageClasses, "froze .* badly", 6)
+addNewItem(keyTable, damageClasses, "froze", 5)
+addNewItem(keyTable, damageClasses, "pounded .* very hard", 5)
+addNewItem(keyTable, damageClasses, "corrupted", 5)
+addNewItem(keyTable, damageClasses, "splashed .* hard", 5)
+addNewItem(keyTable, damageClasses, "buried .* completely", 5)
+addNewItem(keyTable, damageClasses, "slammed .* massively", 7)
+addNewItem(keyTable, damageClasses, "slammed .* very hard", 6)
+addNewItem(keyTable, damageClasses, "slammed", 5)
+addNewItem(keyTable, damageClasses, "bewildered", 5)
+addNewItem(keyTable, damageClasses, "disfigured", 5)
+addNewItem(keyTable, damageClasses, "painfully cleave", 5)
+addNewItem(keyTable, damageClasses, "perforate", 5)
+addNewItem(keyTable, damageClasses, "eyes gleam with terror as your fireshield roasts", 5)
+addNewItem(keyTable, damageClasses, "awfully massacre .* to small fragments", 7)
+addNewItem(keyTable, damageClasses, "awfully massacre", 6)
+addNewItem(keyTable, damageClasses, "totally massacre", 6)
+addNewItem(keyTable, damageClasses, "massacred", 6)
+addNewItem(keyTable, damageClasses, "butchered .* badly", 6)
+addNewItem(keyTable, damageClasses, "vanquished", 6)
+addNewItem(keyTable, damageClasses, "stunned", 6)
+addNewItem(keyTable, damageClasses, "blasted .* violently", 6)
+addNewItem(keyTable, damageClasses, "poisoned", 6)
+addNewItem(keyTable, damageClasses, "soaked", 6)
+addNewItem(keyTable, damageClasses, "stupified", 6)
+addNewItem(keyTable, damageClasses, "disfigured .* horribly", 6)
+addNewItem(keyTable, damageClasses, "run-through", 6)
+addNewItem(keyTable, damageClasses, "bludgeon", 6)
+addNewItem(keyTable, damageClasses, "totally annihilate", 8)
+addNewItem(keyTable, damageClasses, "annihilate .* with a god-like force", 7)
+addNewItem(keyTable, damageClasses, "totally annihilate", 7)
+addNewItem(keyTable, damageClasses, "annihilated", 7)
+addNewItem(keyTable, damageClasses, "tormented", 7)
+addNewItem(keyTable, damageClasses, "pulverized", 7)
+addNewItem(keyTable, damageClasses, "exorcised", 7)
+addNewItem(keyTable, damageClasses, "incinerated", 7)
+addNewItem(keyTable, damageClasses, "electrocuted", 7)
+addNewItem(keyTable, damageClasses, "blasted .* explosively", 7)
+addNewItem(keyTable, damageClasses, "injected .* turning blood to poison", 7)
+addNewItem(keyTable, damageClasses, "drenched", 7)
+addNewItem(keyTable, damageClasses, "mutilated", 7)
+addNewItem(keyTable, damageClasses, "impale .* horribly", 8)
+addNewItem(keyTable, damageClasses, "impale", 7)
+addNewItem(keyTable, damageClasses, "shattered", 7)
+addNewItem(keyTable, damageClasses, "obliterated", 8)
+addNewItem(keyTable, damageClasses, "devastatingly decimate", 8)
 
 function nominalColor(level)
     local color = {0, 0, 0} -- r, g, b
@@ -97,11 +204,15 @@ function extractDamage(s, damageClasses)
     local earlyReturn = false
 
     -- O(n^2)
-    for damage, class in pairs(damageClasses) do
+    --for damage, class in pairs(damageClasses) do
+    for _, damage in ipairs(keyTable) do
+        class = damageClasses[damage]
         if s:find(damage) then
+            echo("*" .. damage .. "=" .. class .. "* ")
             -- Color
             selectString(s, 1)
             rgb = nominalColor(class)
+            echo("color=" .. rgb[1] .. "," .. rgb[2] .. "," .. rgb[3])
             setFgColor(rgb[1], rgb[2], rgb[3])
             replace(s .. "(" .. class .. ")")
             resetFormat()
