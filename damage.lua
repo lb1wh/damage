@@ -204,7 +204,6 @@ function extractDamage(s, damageClasses)
     local earlyReturn = false
 
     -- O(n^2)
-    --for damage, class in pairs(damageClasses) do
     for _, damage in ipairs(keyTable) do
         class = damageClasses[damage]
         if s:find(damage) then
