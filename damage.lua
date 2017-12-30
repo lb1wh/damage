@@ -207,11 +207,9 @@ function extractDamage(s, damageClasses)
     for _, damage in ipairs(keyTable) do
         class = damageClasses[damage]
         if s:find(damage) then
-            echo("*" .. damage .. "=" .. class .. "* ")
             -- Color
             selectString(s, 1)
             rgb = nominalColor(class)
-            echo("color=" .. rgb[1] .. "," .. rgb[2] .. "," .. rgb[3])
             setFgColor(rgb[1], rgb[2], rgb[3])
             replace(s .. "(" .. class .. ")")
             resetFormat()
